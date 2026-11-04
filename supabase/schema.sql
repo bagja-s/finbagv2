@@ -48,6 +48,24 @@ CREATE TABLE public.categories (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+-- Recurring Transactions table (must be before transactions due to FK reference)
+CREATE TABLE public.recurring_transactions (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+    wallet_id UUID NOT NULL REFERENCES public.wallets(id) ON DELETE RESTRICT,
+    category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
+    amount NUMERIC(15, 2) NOT NULL CHECK (amount > 0),
+    type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'transfer')),
+    frequency TEXT NOT NULL CHECK (frequency IN ('daily', 'weekly', 'biweekly', 'monthly', 'quarterly', 'yearly')),
+    start_date DATE NOT NULL,
+    end_date DATE,
+    next_date DATE NOT NULL,
+    note TEXT,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 -- Transactions table
 CREATE TABLE public.transactions (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -77,24 +95,6 @@ CREATE TABLE public.budgets (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UNIQUE(user_id, category_id, period, month, year)
-);
-
--- Recurring Transactions table
-CREATE TABLE public.recurring_transactions (
-    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    user_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
-    wallet_id UUID NOT NULL REFERENCES public.wallets(id) ON DELETE RESTRICT,
-    category_id UUID REFERENCES public.categories(id) ON DELETE SET NULL,
-    amount NUMERIC(15, 2) NOT NULL CHECK (amount > 0),
-    type TEXT NOT NULL CHECK (type IN ('income', 'expense', 'transfer')),
-    frequency TEXT NOT NULL CHECK (frequency IN ('daily', 'weekly', 'biweekly', 'monthly', 'quarterly', 'yearly')),
-    start_date DATE NOT NULL,
-    end_date DATE,
-    next_date DATE NOT NULL,
-    note TEXT,
-    is_active BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Exchange Rates table (for caching)
