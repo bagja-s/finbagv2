@@ -1,4 +1,7 @@
 import withPWA from "next-pwa";
+import withNextIntl from "next-intl/plugin";
+
+const withNextIntlConfig = withNextIntl("./src/lib/i18n-request.ts");
 
 const nextConfig = {
   reactStrictMode: true,
@@ -50,6 +53,6 @@ const withPWAConfig = withPWA({
       },
     },
   ],
-})(nextConfig);
+})(withNextIntlConfig(nextConfig));
 
 export default withPWAConfig;
