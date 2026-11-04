@@ -40,10 +40,9 @@ function LoginForm() {
     },
   });
 
-  const supabase = createClient();
-
   const onSubmit = async (data: LoginFormData) => {
     setLoading(true);
+    const supabase = createClient();
     try {
       const { error } = await supabase.auth.signInWithPassword({
         email: data.email,
@@ -64,6 +63,7 @@ function LoginForm() {
 
   const handleOAuthLogin = async (provider: "google" | "github") => {
     setLoading(true);
+    const supabase = createClient();
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,

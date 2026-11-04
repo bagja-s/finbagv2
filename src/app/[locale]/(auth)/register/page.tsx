@@ -43,10 +43,9 @@ function RegisterForm() {
     },
   });
 
-  const supabase = createClient();
-
   const onSubmit = async (data: RegisterFormData) => {
     setLoading(true);
+    const supabase = createClient();
     try {
       const { error } = await supabase.auth.signUp({
         email: data.email,
@@ -72,6 +71,7 @@ function RegisterForm() {
 
   const handleOAuthRegister = async (provider: "google" | "github") => {
     setLoading(true);
+    const supabase = createClient();
     try {
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
