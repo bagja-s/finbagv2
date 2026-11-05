@@ -34,6 +34,7 @@ function RegisterForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(registerFormSchema as any),
     defaultValues: {
       email: "",
@@ -62,8 +63,9 @@ function RegisterForm() {
 
       toast({ title: t("success"), description: t("resetEmailSent"), variant: "success" });
       router.push(`/${locale}/login`);
-    } catch (error: any) {
-      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast({ title: t("error"), description: message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -80,8 +82,9 @@ function RegisterForm() {
         },
       });
       if (error) throw error;
-    } catch (error: any) {
-      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast({ title: t("error"), description: message, variant: "destructive" });
       setLoading(false);
     }
   };

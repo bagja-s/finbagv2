@@ -16,7 +16,7 @@ export interface HistoricalRateData {
 }
 
 // In-memory cache for exchange rates
-const rateCache = new Map<string, { data: any; timestamp: number }>();
+const rateCache = new Map<string, { data: ExchangeRateData | HistoricalRateData; timestamp: number }>();
 const CACHE_DURATION = 1000 * 60 * 60; // 1 hour
 
 export async function fetchLatestRates(
@@ -26,7 +26,7 @@ export async function fetchLatestRates(
   const cached = rateCache.get(cacheKey);
 
   if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-    return cached.data;
+    return cached.data as ExchangeRateData;
   }
 
   try {

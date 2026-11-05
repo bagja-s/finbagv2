@@ -6,13 +6,6 @@ import type { Profile, Wallet, Category, Transaction, Budget, RecurringTransacti
 
 const supabase = createClient();
 
-// Generic fetcher with error handling
-async function fetcher<T>(query: Promise<{ data: T | null; error: Error | null }>): Promise<T | null> {
-  const { data, error } = await query;
-  if (error) throw error;
-  return data;
-}
-
 // Profile hooks
 export function useProfile() {
   const [profile, setProfile] = useState<Profile | null>(null);

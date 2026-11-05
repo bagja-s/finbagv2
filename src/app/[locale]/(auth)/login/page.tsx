@@ -33,6 +33,7 @@ function LoginForm() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     resolver: zodResolver(loginFormSchema as any),
     defaultValues: {
       email: "",
@@ -54,8 +55,9 @@ function LoginForm() {
       toast({ title: t("success"), variant: "success" });
       router.push(redirectTo);
       router.refresh();
-    } catch (error: any) {
-      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast({ title: t("error"), description: message, variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -72,8 +74,9 @@ function LoginForm() {
         },
       });
       if (error) throw error;
-    } catch (error: any) {
-      toast({ title: t("error"), description: error.message, variant: "destructive" });
+    } catch (error) {
+      const message = error instanceof Error ? error.message : "Unknown error";
+      toast({ title: t("error"), description: message, variant: "destructive" });
       setLoading(false);
     }
   };

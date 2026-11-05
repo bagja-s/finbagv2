@@ -2,7 +2,6 @@
 
 import { ReactNode } from "react";
 import Link from "next/link";
-import { cn } from "@/lib/utils/helpers";
 
 interface AuthLayoutProps {
   children: ReactNode;

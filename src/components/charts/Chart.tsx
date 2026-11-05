@@ -13,8 +13,8 @@ import {
   Tooltip,
   Legend,
   Filler,
-  ChartOptions,
   ChartData,
+  ChartOptions,
 } from "chart.js";
 import { Doughnut, Bar, Line } from "react-chartjs-2";
 
@@ -32,8 +32,8 @@ ChartJS.register(
 );
 
 export interface ChartProps {
-  data: any;
-  options?: any;
+  data: ChartData;
+  options?: ChartOptions;
   type: "doughnut" | "bar" | "line";
   height?: number;
   width?: number;
@@ -54,7 +54,7 @@ export function Chart({ data, options, type, height = 300, width, className }: C
     }
   }, [height, width]);
 
-  const defaultOptions: any = {
+  const defaultOptions: ChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
@@ -82,7 +82,8 @@ export function Chart({ data, options, type, height = 300, width, className }: C
 
   return (
     <div ref={containerRef} className={className} style={{ height, width: width ? `${width}px` : "100%" }}>
-      <ChartComponent data={data} options={defaultOptions} />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <ChartComponent data={data as any} options={defaultOptions as any} />
     </div>
   );
 }
